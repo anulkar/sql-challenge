@@ -1,0 +1,2 @@
+-- Create a table schema for each of the six CSV files. 
+-- Remember to specify data types, primary keys, foreign keys, and other constraints.
