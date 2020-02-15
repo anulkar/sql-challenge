@@ -34,30 +34,32 @@ CREATE TABLE "employees" (
 
 -- Create the salaries table
 CREATE TABLE "salaries" (
+    "salary_no" SERIAL   NOT NULL,
     "emp_no" INTEGER   NOT NULL,
     "salary" INTEGER   NOT NULL,
     "from_date" DATE   NOT NULL,
     "to_date" DATE   NOT NULL,
     CONSTRAINT "pk_salaries" PRIMARY KEY (
-        "emp_no"
+        "salary_no"
      )
 );
 
 -- Create the titles table
 CREATE TABLE "titles" (
+    "title_no" SERIAL   NOT NULL,
     "emp_no" INTEGER   NOT NULL,
     "title" VARCHAR(100)   NOT NULL,
     "from_date" DATE   NOT NULL,
     "to_date" DATE   NOT NULL,
     CONSTRAINT "pk_titles" PRIMARY KEY (
-        "emp_no","title","from_date"
+        "title_no"
      )
 );
 
--- Create the dept_manager table
+-- Create the department_manager table
 CREATE TABLE "dept_manager" (
-    "dept_no" CHAR(4)   NOT NULL,
     "emp_no" INTEGER   NOT NULL,
+    "dept_no" CHAR(4)   NOT NULL,
     "from_date" DATE   NOT NULL,
     "to_date" DATE   NOT NULL,
     CONSTRAINT "pk_dept_manager" PRIMARY KEY (
@@ -65,7 +67,7 @@ CREATE TABLE "dept_manager" (
      )
 );
 
--- Create the dept-mp table
+-- Create the deptartment-employee table
 CREATE TABLE "dept_emp" (
     "emp_no" INTEGER   NOT NULL,
     "dept_no" CHAR(4)   NOT NULL,
@@ -84,11 +86,11 @@ REFERENCES "employees" ("emp_no");
 ALTER TABLE "titles" ADD CONSTRAINT "fk_titles_emp_no" FOREIGN KEY("emp_no")
 REFERENCES "employees" ("emp_no");
 
-ALTER TABLE "dept_manager" ADD CONSTRAINT "fk_dept_manager_dept_no" FOREIGN KEY("dept_no")
-REFERENCES "departments" ("dept_no");
-
 ALTER TABLE "dept_manager" ADD CONSTRAINT "fk_dept_manager_emp_no" FOREIGN KEY("emp_no")
 REFERENCES "employees" ("emp_no");
+
+ALTER TABLE "dept_manager" ADD CONSTRAINT "fk_dept_manager_dept_no" FOREIGN KEY("dept_no")
+REFERENCES "departments" ("dept_no");
 
 ALTER TABLE "dept_emp" ADD CONSTRAINT "fk_dept_emp_emp_no" FOREIGN KEY("emp_no")
 REFERENCES "employees" ("emp_no");
@@ -96,10 +98,8 @@ REFERENCES "employees" ("emp_no");
 ALTER TABLE "dept_emp" ADD CONSTRAINT "fk_dept_emp_dept_no" FOREIGN KEY("dept_no")
 REFERENCES "departments" ("dept_no");
 
+-- The COPY statements commented out below were used to load/import data from each of the CSV files into their respective tables.
 /*
-------------------------------------------------------------------------------------------------------------------------------
-The COPY statements commented out below were used to load/import data from each of the CSV files into their respective tables.
-
 COPY departments(dept_no, dept_name) 
 FROM '/Users/Shared/Resources/departments.csv'
 DELIMITER ',' CSV HEADER;
@@ -123,7 +123,6 @@ DELIMITER ',' CSV HEADER;
 COPY dept_emp(emp_no, dept_no, from_date, to_date) 
 FROM '/Users/Shared/Resources/dept_emp.csv'
 DELIMITER ',' CSV HEADER;
-------------------------------------------------------------------------------------------------------------------------------
 */
 
 -- Run select queries on each table to verify the imported data
